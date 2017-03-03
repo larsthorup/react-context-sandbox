@@ -1,5 +1,6 @@
-import React, {Component, PropTypes} from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {lock, unlock} from './action';
 
 class Lock extends Component {
   constructor () {
@@ -33,7 +34,7 @@ class Lock extends Component {
       ...this.state,
       isLocked: true
     });
-    this.props.onLock();
+    this.props.lock();
   }
 
   onUnlock = (ev) => {
@@ -42,19 +43,12 @@ class Lock extends Component {
       ...this.state,
       isLocked: false
     });
-    this.props.onUnlock(this.state.apikey);
+    this.props.unlock(this.state.apikey);
   }
 }
-Lock.propTypes = {
-  onLock: PropTypes.func.isRequired,
-  onUnlock: PropTypes.func.isRequired
-};
 
-function mapDispatchToProps (dispatch) {
-  return {
-    onLock: () => dispatch({type: 'LOCK'}),
-    onUnlock: (apikey) => dispatch({type: 'UNLOCK', apikey})
-  };
+function mapPropsToState (state) {
+  return {};
 }
 
-export default connect(state => ({}), mapDispatchToProps)(Lock);
+export default connect(mapPropsToState, {lock, unlock})(Lock);

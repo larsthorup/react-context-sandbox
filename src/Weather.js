@@ -1,13 +1,12 @@
-import React, {Component, PropTypes} from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {fetchingWeather} from './action';
 
 class Weather extends Component {
   constructor () {
     super();
     this.state = {
       city: '',
-      error: null,
-      weather: null
     };
   }
 
@@ -19,7 +18,7 @@ class Weather extends Component {
         <input autoFocus placeholder="city" onChange={this.onCityChange}/>
         <button>Forecast</button>
       </form>
-      {this.state.error ? <strong>{this.state.error}</strong> : <p>{this.state.weather}</p>}
+      {this.props.error ? <strong>{this.props.error}</strong> : <p>{this.props.weather}</p>}
     </div>
     );
   }
@@ -30,36 +29,16 @@ class Weather extends Component {
 
   onForecast = (ev) => {
     ev.preventDefault(); // Note: prevent traditional form submit from reloading the page
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${this.state.city}&appid=${this.props.apikey}`;
-    fetch(url)
-    .then((response) => Promise.all([response, response.json()]))
-    .then(this.onForecastReceived);
-  }
-
-  onForecastReceived = ([response, result]) => {
-    if (response.ok) {
-      this.setState({
-        ...this.state,
-        error: null,
-        weather: result.weather.map((weather) => weather.description).join(', ')
-      });
-    } else {
-      this.setState({
-        ...this.state,
-        error: result.message,
-        weather: null
-      });
-    }
+    this.props.fetchingWeather(this.state.city);
   }
 }
-Weather.propTypes = {
-  apikey: PropTypes.string.isRequired
-};
 
 function mapStateToProps (state) {
   return {
-    apikey: state.auth.apikey
+    apikey: state.auth.apikey,
+    error: state.error,
+    weather: state.weather,
   };
 }
 
-export default connect(mapStateToProps)(Weather);
+export default connect(mapStateToProps, {fetchingWeather})(Weather);
