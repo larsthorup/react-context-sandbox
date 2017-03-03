@@ -43,9 +43,6 @@ export const reducer = (state = {auth: {}}, action) => {
       return unlockReducer(state, action);
     case weatherReceived.type:
       return weatherReceivedReducer(state, action);
-    // Note: eventually show a spinner, and hide it again in weatherReceivedReducer
-    // case weatherRequested:
-    //   return weatherRequestedReducer(state, action);
     default:
       return state;
   }
