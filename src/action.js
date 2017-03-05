@@ -69,7 +69,7 @@ export const fetchingWeather = (city) => (dispatch, getState) => {
   dispatch(weatherRequested());
   const state = getState();
   const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${state.auth.apikey}`;
-  fetchJson(url).then(([response, json]) => {
+  return fetchJson(url).then(([response, json]) => {
     dispatch(weatherReceived(response, json));
   });
 }
