@@ -1,6 +1,33 @@
 import fetchJson from './fetchJson';
 
 
+// action creators, synchronous
+
+export const lock = () => ({type: lock.type});
+lock.type = 'LOCK';
+
+export const unlock = (apikey) => ({type: unlock.type, apikey});
+unlock.type = 'UNLOCK';
+
+const weatherRequested = () => ({type: weatherRequested.type});
+weatherRequested.type = 'WEATHER_REQUESTED';
+
+const weatherReceived = (response, json) => ({type: weatherReceived.type, response, json});
+weatherReceived.type = 'WEATHER_RECEIVED';
+
+
+// action creators, asynchronous
+
+export const fetchingWeather = (city) => (dispatch, getState) => {
+  dispatch(weatherRequested());
+  const state = getState();
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${state.auth.apikey}`;
+  return fetchJson(url).then(([response, json]) => {
+    dispatch(weatherReceived(response, json));
+  });
+}
+
+
 // reducers
 
 function lockReducer (state, action) {
@@ -48,28 +75,3 @@ export const reducer = (state = {auth: {}}, action) => {
   }
 }
 
-
-// action creators, synchronous
-
-export const lock = () => ({type: lock.type});
-lock.type = 'LOCK';
-
-export const unlock = (apikey) => ({type: unlock.type, apikey});
-unlock.type = 'UNLOCK';
-
-const weatherRequested = () => ({type: weatherRequested.type});
-weatherRequested.type = 'WEATHER_REQUESTED';
-
-const weatherReceived = (response, json) => ({type: weatherReceived.type, response, json});
-weatherReceived.type = 'WEATHER_RECEIVED';
-
-// action creators, asynchronous
-
-export const fetchingWeather = (city) => (dispatch, getState) => {
-  dispatch(weatherRequested());
-  const state = getState();
-  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${state.auth.apikey}`;
-  return fetchJson(url).then(([response, json]) => {
-    dispatch(weatherReceived(response, json));
-  });
-}
