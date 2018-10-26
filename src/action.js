@@ -1,52 +1,31 @@
 import fetchJson from './fetchJson';
+import {register} from './actionLib';
 
+// action creators and reducers, synchronous
 
-// action creators, synchronous
+export const initialState = {
+  auth: {}
+};
 
-export const lock = () => ({type: lock.type});
-lock.type = 'LOCK';
-
-export const unlock = (apikey) => ({type: unlock.type, apikey});
-unlock.type = 'UNLOCK';
-
-const weatherRequested = () => ({type: weatherRequested.type});
-weatherRequested.type = 'WEATHER_REQUESTED';
-
-const weatherReceived = (response, json) => ({type: weatherReceived.type, response, json});
-weatherReceived.type = 'WEATHER_RECEIVED';
-
-
-// action creators, asynchronous
-
-export const fetchingWeather = (city) => (dispatch, getState) => {
-  dispatch(weatherRequested());
-  const state = getState();
-  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${state.auth.apikey}`;
-  return fetchJson(url).then(([response, json]) => {
-    dispatch(weatherReceived(response, json));
-  });
-}
-
-
-// reducers
-
-function lockReducer (state, action) {
+export const lock = register('LOCK', (state) => {
   return {
     ...state,
     auth: {}
   }
-}
+});
 
-function unlockReducer (state, {apikey}) {
+export const unlock = register('UNLOCK', (state, {apikey}) => {
   return {
     ...state,
     auth: {
       apikey
     }
   }
-}
+});
 
-function weatherReceivedReducer (state, {response, json}) {
+const weatherRequested = register('WEATHER_REQUESTED');
+
+const weatherReceived = register('WEATHER_RECEIVED', (state, {response, json}) => {
   if (response.ok) {
     return {
       ...state,
@@ -60,18 +39,15 @@ function weatherReceivedReducer (state, {response, json}) {
       weather: null
     };
   }
-}
+});
 
-export const reducer = (state = {auth: {}}, action) => {
-  switch (action.type) {
-    case lock.type:
-      return lockReducer(state, action);
-    case unlock.type:
-      return unlockReducer(state, action);
-    case weatherReceived.type:
-      return weatherReceivedReducer(state, action);
-    default:
-      return state;
-  }
-}
+// action creators, asynchronous
 
+export const fetchingWeather = ({city}) => (dispatch, getState) => {
+  dispatch(weatherRequested());
+  const state = getState();
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${state.auth.apikey}`;
+  return fetchJson(url).then(([response, json]) => {
+    dispatch(weatherReceived({response, json}));
+  });
+}

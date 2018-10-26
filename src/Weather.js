@@ -6,7 +6,7 @@ function Weather (props) {
   let city = null;
   const onForecast = (ev) => {
     ev.preventDefault(); // Note: prevent traditional form submit from reloading the page
-    props.fetchingWeather(city.value);
+    props.fetchingWeather({city: city.value});
   }
   return (
     <div>

@@ -9,7 +9,7 @@ function Lock (props) {
   };
   const unlock = (ev) => {
     ev.preventDefault(); // Note: prevent traditional form submit from reloading the page
-    props.unlock(apikey.value);
+    props.unlock({apikey: apikey.value});
   };
   return props.isUnlocked ? (
     <button onClick={lock}>Lock</button>
