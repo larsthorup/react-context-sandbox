@@ -1,4 +1,4 @@
-import fetchJson from './fetchJson';
+import fetchingJson from './fetchingJson';
 import {register} from './actionLib';
 
 // action creators and reducers, synchronous
@@ -43,11 +43,10 @@ const weatherReceived = register('WEATHER_RECEIVED', (state, {response, json}) =
 
 // action creators, asynchronous
 
-export const fetchingWeather = ({city}) => (dispatch, getState) => {
+export const fetchingWeather = ({city}) => async (dispatch, getState) => {
   dispatch(weatherRequested());
   const state = getState();
   const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${state.auth.apikey}`;
-  return fetchJson(url).then(([response, json]) => {
-    dispatch(weatherReceived({response, json}));
-  });
+  const {response, json} = await fetchingJson(url);
+  dispatch(weatherReceived({response, json}));
 }
