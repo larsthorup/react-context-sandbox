@@ -5,7 +5,7 @@ function Weather (props) {
   let city = null;
   const onForecast = (ev) => {
     ev.preventDefault(); // Note: prevent traditional form submit from reloading the page
-    props.action.fetchingWeather({city: city.value});
+    props.fetchingWeather({city: city.value});
   };
   return (
     <div>
@@ -27,4 +27,6 @@ function mapStateToProps (state) {
   };
 }
 
-export default connect(mapStateToProps)(Weather);
+export default connect(mapStateToProps, {
+  // fetchingWeather
+})(Weather);
