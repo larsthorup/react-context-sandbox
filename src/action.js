@@ -23,6 +23,8 @@ export const unlock = (state, {apikey}) => {
   }
 };
 
+const weatherRequested = () => {};
+
 const weatherReceived = (state, {response, json}) => {
   if (response.ok) {
     return {
@@ -42,9 +44,10 @@ const weatherReceived = (state, {response, json}) => {
 // asynchronous
 
 export const fetchingWeather = ({city}) => async (dispatch, getState) => {
-  // dispatch(weatherRequested());
-  // const state = getState();
-  // const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${state.auth.apikey}`;
-  // const {response, json} = await fetchingJson(url);
-  // dispatch(weatherReceived({response, json}));
+  dispatch(weatherRequested);
+  const state = getState();
+  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${state.auth.apikey}`;
+  const {response, json} = await fetchingJson(url);
+  console.log(json);
+  dispatch(weatherReceived, {response, json});
 }

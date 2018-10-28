@@ -18,15 +18,23 @@ export class Provider extends React.Component {
   }
 }
 
-export const connect = (mapStateToProps, reducerSet = {}) => (Component) => (ownProps) => {
+export const connect = (mapStateToProps, reducerSet = {}, sagaSet = {}) => (Component) => (ownProps) => {
   return (
   <AppContext.Consumer>
     {(store) => {
+      const dispatch = (reducer, payload) => store.setState(reducer(store.state, payload));
+      const getState = () => store.state;
       const boundReducerSet = Object.entries(reducerSet).reduce((accumulator, [name, reducer]) => {
-        const boundReducer = (payload) => { store.setState(reducer(store.state, payload)); };
+        const boundReducer = (payload) => dispatch(reducer, payload);
         return Object.assign({[name]: boundReducer}, accumulator);
       }, {});
-      const props = Object.assign(boundReducerSet, mapStateToProps(store.state, ownProps));
+      const boundSagaSet = Object.entries(sagaSet).reduce((accumulator, [name, saga]) => {
+        const boundSaga = (payload) => {
+          saga(payload)(dispatch, getState);
+        };
+        return Object.assign({[name]: boundSaga}, accumulator);
+      }, {});
+      const props = Object.assign({}, mapStateToProps(store.state, ownProps), boundReducerSet, boundSagaSet);
       return (
         <Component {...props} />
       );

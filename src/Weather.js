@@ -1,5 +1,6 @@
 import React from 'react';
-import {connect} from "./store";
+import {connect} from './store';
+import {fetchingWeather} from './action';
 
 function Weather (props) {
   let city = null;
@@ -27,6 +28,6 @@ function mapStateToProps (state) {
   };
 }
 
-export default connect(mapStateToProps, {
-  // fetchingWeather
+export default connect(mapStateToProps, {}, {
+  fetchingWeather
 })(Weather);
