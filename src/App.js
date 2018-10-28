@@ -1,6 +1,6 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import './App.css';
+import {connect} from './store';
 import Lock from './Lock';
 import Weather from './Weather';
 

@@ -1,15 +1,14 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {lock, unlock} from './action';
+import {connect} from "./store";
 
 function Lock (props) {
   let apikey = null;
   const lock = () => {
-    props.lock();
+    props.action.lock();
   };
   const unlock = (ev) => {
     ev.preventDefault(); // Note: prevent traditional form submit from reloading the page
-    props.unlock({apikey: apikey.value});
+    props.action.unlock({apikey: apikey.value});
   };
   return props.isUnlocked ? (
     <button onClick={lock}>Lock</button>
@@ -27,4 +26,4 @@ function mapPropsToState (state) {
   };
 }
 
-export default connect(mapPropsToState, {lock, unlock})(Lock);
+export default connect(mapPropsToState)(Lock);

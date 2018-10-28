@@ -1,13 +1,11 @@
 {
-  "name": "redux-weather-demo",
+  "name": "reach-context-sandbox",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
-    "react-redux": "^5.0.3",
-    "redux": "^4.0.1",
-    "redux-thunk": "^2.2.0"
+    "react": "next",
+    "react-dom": "next",
+    "react-redux": "^5.0.3"
   },
   "devDependencies": {
     "react-scripts": "2.0.5"
