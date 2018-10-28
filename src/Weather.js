@@ -1,13 +1,13 @@
 import React from 'react';
 import {connect} from './store';
-import {fetchingWeather} from './action';
+import {fetchingWeather} from './saga';
 
 function Weather (props) {
   let city = null;
   const onForecast = (ev) => {
     ev.preventDefault(); // Note: prevent traditional form submit from reloading the page
     props.fetchingWeather({city: city.value});
-  };
+  }
   return (
     <div>
       <h1>Weather</h1>
@@ -28,6 +28,4 @@ function mapStateToProps (state) {
   };
 }
 
-export default connect(mapStateToProps, {}, {
-  fetchingWeather
-})(Weather);
+export default connect(mapStateToProps, {}, {fetchingWeather})(Weather);

@@ -27,7 +27,4 @@ function mapPropsToState (state) {
   };
 }
 
-export default connect(mapPropsToState, {
-  lock,
-  unlock
-})(Lock);
+export default connect(mapPropsToState, {lock, unlock})(Lock);
